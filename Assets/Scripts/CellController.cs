@@ -12,22 +12,37 @@ public class CellController : MonoBehaviour
 
     public int Level;
     public DNA Dna;
-    public int parentLinkId;
+    public int direction;
 
+    public bool isBranch;
+    
     private void Start()
     {
         if (Genome.isRoot)
         {
             for (int i = 0; i < 6; i++)
             {
-                var rootGO = Instantiate(cell, transform.position + GetVectorToChild(i), Quaternion.identity);
-                var cellController = rootGO.GetComponent<CellController>();
-                cellController.parentLinkId = i;
-                cellController.Level = 0;
-                cellController.Dna = Instantiate(Dna);
-                cellController.Genome = Instantiate(Dna.root);
+                CreateChild(i, 0, true);
             }
         }
+        else if(Level < 15)
+        {
+            if (isBranch)
+            {
+                CreateChild(direction, Level + 1, true);
+                CreateChild(GetNextDirection(direction), Level + 1, false);
+            }
+            else
+            {
+                CreateChild(direction , Level + 1, false);
+            }
+        }
+    }
+
+    private int GetNextDirection(int dir)
+    {
+        dir += 1;
+        return dir > 5 ? dir - 6 : dir;
     }
 
     private Vector3 GetVectorToChild(int linkId)
@@ -58,4 +73,18 @@ public class CellController : MonoBehaviour
 
         return vector;
     }
+
+    private void CreateChild(int direction, int level, bool isBranch)
+    {
+        var rootGO = Instantiate(cell, 
+            transform.position + GetVectorToChild(direction), 
+            Quaternion.identity);
+        var cellController = rootGO.GetComponent<CellController>();
+        cellController.direction = direction;
+        cellController.Level = level;
+        cellController.isBranch = isBranch;
+        cellController.Dna = Dna;
+        cellController.Genome = Instantiate(Dna.GetGenomeForLevel(level));
+    }
+    
 }

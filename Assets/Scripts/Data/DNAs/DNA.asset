@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb558db7c4124fa3b8dcb22c9b95c75, type: 3}
   m_Name: DNA
   m_EditorClassIdentifier: 
+  root: {fileID: 11400000, guid: a71150c3eaa7644a4ac6093b2dc5745f, type: 2}
   genomes:
   - {fileID: 11400000, guid: b0734c54674f84c88af37fd03863891a, type: 2}
